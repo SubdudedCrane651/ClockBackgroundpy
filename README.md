@@ -1,1 +1,1 @@
-A simple Python PyQt5 GUI code to show a clock in the background gives the impression it"s part of the wallpapper.
+A simple Python PyQt5 GUI code to show a clock in the background gives the impression it's part of the wallpapper.
