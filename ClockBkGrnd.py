@@ -4,6 +4,12 @@ from PyQt5.QtWidgets import QApplication, QLabel
 from PyQt5.QtGui import QFont, QPalette, QColor
 import ctypes
 
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
+import os
+os.environ["QT_LOGGING_RULES"] = "qt.qpa.fonts=false"
+
 def make_click_through(hwnd):
     # WS_EX_TRANSPARENT = 0x20
     # WS_EX_LAYERED = 0x80000
