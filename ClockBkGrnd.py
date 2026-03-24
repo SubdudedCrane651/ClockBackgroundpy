@@ -1,8 +1,5 @@
 import sys
-from PyQt5.QtCore import Qt, QTimer, QTime
-from PyQt5.QtWidgets import QApplication, QLabel
-from PyQt5.QtGui import QFont, QPalette, QColor
-import ctypes
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -10,50 +7,86 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 import os
 os.environ["QT_LOGGING_RULES"] = "qt.qpa.fonts=false"
 
-def make_click_through(hwnd):
-    # WS_EX_TRANSPARENT = 0x20
-    # WS_EX_LAYERED = 0x80000
-    styles = ctypes.windll.user32.GetWindowLongW(hwnd, -20)
-    ctypes.windll.user32.SetWindowLongW(hwnd, -20, styles | 0x20 | 0x80000)
 
-class DesktopClock(QLabel):
+# ---------------- 3D SHADOW TEXT LABEL ---------------- #
+
+class ShadowText(QtWidgets.QLabel):
+    def __init__(self, text="", parent=None):
+        super().__init__(text, parent)
+        self.font = QtGui.QFont("Segoe UI", 48, QtGui.QFont.Bold)
+        self.setStyleSheet("color: white;")
+
+    def sizeHint(self):
+        fm = QtGui.QFontMetrics(self.font)
+        height = fm.height() + 20   # extra space for shadow
+        width = fm.width(self.text()) + 10
+        return QtCore.QSize(width, height)
+
+    def paintEvent(self, event):
+        painter = QtGui.QPainter(self)
+        painter.setFont(self.font)
+
+        text = self.text()
+        fm = QtGui.QFontMetrics(self.font)
+        baseline = fm.ascent()
+
+        # Shadow
+        painter.setPen(QtGui.QColor(0, 0, 0, 180))
+        painter.drawText(4, 4 + baseline, text)
+
+        # Main text
+        painter.setPen(QtGui.QColor(255, 255, 255))
+        painter.drawText(0, baseline, text)
+
+
+# ---------------- MAIN WINDOW ---------------- #
+
+class DesktopClock(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
 
+        # Transparent, click-through, no border
         self.setWindowFlags(
-            Qt.FramelessWindowHint |
-            Qt.Tool |
-            Qt.WindowStaysOnBottomHint |
-            Qt.X11BypassWindowManagerHint
+            QtCore.Qt.FramelessWindowHint |
+            QtCore.Qt.WindowStaysOnBottomHint |
+            QtCore.Qt.Tool
         )
+        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        self.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents)
 
-        self.setAttribute(Qt.WA_TranslucentBackground)
-        self.setAttribute(Qt.WA_TransparentForMouseEvents)
+        # Layout
+        layout = QtWidgets.QVBoxLayout()
+        layout.setContentsMargins(20, 20, 20, 20)
 
-        font = QFont("Segoe UI", 32, QFont.Bold)
-        self.setFont(font)
+        # 3D Clock label
+        self.clock_label = ShadowText()
+        layout.addWidget(self.clock_label)
 
-        palette = QPalette()
-        palette.setColor(QPalette.WindowText, QColor(255, 255, 255))
-        self.setPalette(palette)
+        self.setLayout(layout)
 
-        self.update_time()
+        # Timer for clock
+        self.timer_clock = QtCore.QTimer()
+        self.timer_clock.timeout.connect(self.update_clock)
+        self.timer_clock.start(1000)
 
-        timer = QTimer(self)
-        timer.timeout.connect(self.update_time)
-        timer.start(1000)
+        # Initial update
+        self.update_clock()
 
-        self.resize(300, 80)
-        self.move(30, 30)
+        # Position on desktop
+        self.move(50, 50)
 
-        self.show()
+    # ---------------- UPDATE FUNCTIONS ---------------- #
 
-        hwnd = self.winId().__int__()
-        make_click_through(hwnd)
+    def update_clock(self):
+        current_time = QtCore.QTime.currentTime().toString("hh:mm:ss")
+        self.clock_label.setText(current_time)
+        self.clock_label.repaint()
 
-    def update_time(self):
-        self.setText(QTime.currentTime().toString("HH:mm:ss"))
 
-app = QApplication(sys.argv)
-clock = DesktopClock()
-sys.exit(app.exec_())
+# ---------------- RUN APP ---------------- #
+
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    clock = DesktopClock()
+    clock.show()
+    sys.exit(app.exec_())
