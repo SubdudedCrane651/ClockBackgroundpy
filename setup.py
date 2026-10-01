@@ -1,7 +1,7 @@
 from setuptools import setup
 
 APP = ['Desktop_Countdown.py']
-DATA_FILES = ['events.json']
+DATA_FILES = ['eventsfr.json']
 OPTIONS = {
     'iconfile': 'app_icon.ico',
     'argv_emulation': True,
