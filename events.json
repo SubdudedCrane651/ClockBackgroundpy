@@ -1,0 +1,17 @@
+[
+    {
+        "event": "Christmas Countdown",
+        "date": "2026-12-25 00:00:00",
+        "color": "#ffffff"
+    },
+    {
+        "event": "New Year Countdown",
+        "date": "2027-01-01 00:00:00",
+        "color": "#00ffea"
+    },
+    {
+    "event": "My Birthday",
+    "date": "2027-02-22 00:00:00",
+    "color": "#ff66ff"
+}
+]
