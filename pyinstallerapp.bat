@@ -1,0 +1,1 @@
+pyinstaller --onefile --console --icon=app_icon.ico Desktop_Countdown.py

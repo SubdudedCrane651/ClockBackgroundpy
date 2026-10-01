@@ -99,6 +99,6 @@ if __name__ == "__main__":
         box.show()
         y_offset += box.height() + 20
         
-    print("Countdown boxes are running. Close them to exit the application.")        
+    print("Countdown boxes are running. Close this to exit the application.")        
 
     sys.exit(app.exec())
