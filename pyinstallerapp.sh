@@ -1,0 +1,1 @@
+pyinstaller --onefile --windowed Desktop_Countdown.py  --add-data "evenets.json:."

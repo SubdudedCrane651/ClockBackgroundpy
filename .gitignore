@@ -6,4 +6,4 @@ build/
 __pycache__/
 *.exe
 *.dll
-Output/
+Output/Pyth
