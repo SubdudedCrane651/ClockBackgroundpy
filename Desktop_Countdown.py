@@ -18,7 +18,14 @@ class CountdownBox(QWidget):
             Qt.WindowType.WindowStaysOnTopHint |
             Qt.WindowType.Tool
         )
-        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        if transparent:
+        # Allow transparency
+            self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground, True)
+            bg_color = QColor(0, 0, 0, 160)   # semi-transparent
+        else:
+            # Disable transparency
+            self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground, False)
+            bg_color = QColor(0, 0, 0)        # solid black
 
         # Layout
         layout = QVBoxLayout()
@@ -36,7 +43,7 @@ class CountdownBox(QWidget):
 
         # Transparent black background
         palette = self.palette()
-        palette.setColor(QPalette.ColorRole.Window, QColor(0, 0, 0, 160))
+        palette.setColor(QPalette.ColorRole.Window, QColor(0, 0, 0,160))  # Semi-transparent black
         palette.setColor(QPalette.ColorRole.WindowText, QColor(text_color))
         self.setPalette(palette)
         self.setAutoFillBackground(True)
@@ -85,7 +92,9 @@ def resource_path(relative_path):
 json_path = resource_path("events.json")
 
 with open(json_path, "r") as f:
-    events = json.load(f)
+    config = json.load(f)
+    transparent = config.get("transparent", False)
+    events = config["events"]
 
     boxes = []
 

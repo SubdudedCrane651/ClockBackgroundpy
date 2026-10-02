@@ -1,12 +1,15 @@
-[
-    {
-        "event": "Noël",
-        "date": "2026-12-25 00:00:00",
-        "color": "#ffffff"
-    },
-    {
-        "event": "Nouvel An",
-        "date": "2027-01-01 00:00:00",
-        "color": "#00ffea"
-    }
-]
+{
+    "transparent": false,
+    "events": [
+        {
+            "event": "Noël",
+            "date": "2026-12-25 00:00:00",
+            "color": "#ffffff"
+        },
+        {
+            "event": "Nouvel An",
+            "date": "2027-01-01 00:00:00",
+            "color": "#00ffea"
+        }
+    ]
+}
