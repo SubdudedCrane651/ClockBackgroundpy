@@ -16,7 +16,8 @@ class CountdownBox(QWidget):
         self.setWindowFlags(
             Qt.WindowType.FramelessWindowHint |
             Qt.WindowType.WindowStaysOnTopHint |
-            Qt.WindowType.Tool
+            Qt.WindowType.WindowDoesNotAcceptFocus
+
         )
         if transparent:
         # Allow transparency
